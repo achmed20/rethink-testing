@@ -4,7 +4,8 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+
+	"github.com/achmed20/rethink-testing/models"
 
 	log "github.com/Sirupsen/logrus"
 	r "gopkg.in/dancannon/gorethink.v2"
@@ -23,56 +24,22 @@ func Example() {
 		log.Fatalln(err)
 	}
 
-	type Event struct {
-		Action string `gorethink:"action"`
-		Eid    int    `gorethink:"eid"`
-	}
+	// type Event struct {
+	// 	Action string `gorethink:"action"`
+	// 	Eid    int    `gorethink:"eid"`
+	// }
 
-	type Post struct {
-		Title   string `gorethink:"title"`
-		Content string `gorethink:"content"`
-		Num     int    `gorethink:"num"`
-		Event   Event  `gorethink:"event"`
-	}
+	// type Post struct {
+	// 	Title   string `gorethink:"title"`
+	// 	Content string `gorethink:"content"`
+	// 	Num     int    `gorethink:"num"`
+	// 	Event   Event  `gorethink:"event"`
+	// }
 
 	log.Debugln("started insert 5000 rows")
-	rand.Seed(42) // Try changing this number!
-	answers := []string{
-		"It is certain",
-		"It is decidedly so",
-		"Without a doubt",
-		"Yes definitely",
-		"You may rely on it",
-		"As I see it yes",
-		"Most likely",
-		"Outlook good",
-		"Yes",
-		"Signs point to yes",
-		"Reply hazy try again",
-		"Ask again later",
-		"Better not tell you now",
-		"Cannot predict now",
-		"Concentrate and ask again",
-		"Don't count on it",
-		"My reply is no",
-		"My sources say no",
-		"Outlook not so good",
-		"Very doubtful",
-	}
 
-	events := []Event{
-		{"click", 1},
-		{"open", 2},
-		{"bounce", 3},
-	}
-
-	for i := 0; i < 1; i++ {
-		_, _ = r.DB("achmed").Table("meins").Insert(Post{
-			Title:   "Lorem ipsum",
-			Content: answers[rand.Intn(len(answers))],
-			Num:     rand.Intn(10),
-			Event:   events[rand.Intn(len(events))],
-		}).RunWrite(session, r.RunOpts{Durability: "soft"})
+	for i := 0; i < 10000; i++ {
+		_, _ = r.DB("achmed").Table("meins").Insert(receiver.Randomize()).RunWrite(session, r.RunOpts{Durability: "soft"})
 		if i%1000 == 0 {
 			log.Infoln("1000 written")
 		}
